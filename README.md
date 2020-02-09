@@ -1,2 +1,2 @@
-# practice
-repository for practice
+# ReactJS
+repository for ReactJS Practice
