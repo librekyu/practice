@@ -2,20 +2,20 @@ import React from 'react';
 
 import withRedux from 'next-redux-wrapper';
 import Helmet from 'react-helmet';
-import {applyMiddleware, compose, createStore} from 'redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 
 import Util from '../src/util/Util';
 
 import rootReducer from '../src/reducer';
 import rootSaga from '../src/sagas';
-import Layout from "../src/components/layout";
+import Layout from '../src/components/layout';
 
 require('react-app-polyfill/ie9');
 require('react-app-polyfill/stable');
 
-const ReactStudy = ({Component, store, pageProps, routerInfo}) => {
+const ReactStudy = ({ Component, store, pageProps, routerInfo }) => {
   const parsedRouterInfo = routerInfo;
 
   console.log('router Information', routerInfo);
@@ -24,7 +24,7 @@ const ReactStudy = ({Component, store, pageProps, routerInfo}) => {
     <Provider store={store}>
       <Helmet
         title="ReactJS Practice"
-        htmlAttributes={{lang: 'ko'}}
+        htmlAttributes={{ lang: 'ko' }}
         meta={[{
           charSet: 'UTF-8',
         }, {
@@ -93,7 +93,7 @@ const configureStore = (initialState, options) => {
       applyMiddleware(...middlewares),
       !options.isServer && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined'
         ? window.__REDUX_DEVTOOLS_EXTENSION__()
-        : f => f
+        : (f) => f
     );
   const store = createStore(rootReducer, initialState, enhancer);
   sagaMiddleware.run(rootSaga);
