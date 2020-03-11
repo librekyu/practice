@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import Router from 'next/router';
+import Home from '../index';
 
 const InputRouter = (props) => {
   const welcomeString = 'input Router';
@@ -24,6 +25,10 @@ const InputRouter = (props) => {
       <button onClick={onClickButton}>To outputRouter</button>
     </>
   );
+};
+
+InputRouter.getInitialProps = (props) => {
+  console.log('*****************  InputRouter get initial props  ***************************');
 };
 
 export default InputRouter;

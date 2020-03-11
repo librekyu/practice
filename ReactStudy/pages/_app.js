@@ -18,8 +18,6 @@ require('react-app-polyfill/stable');
 const ReactStudy = ({ Component, store, pageProps, routerInfo }) => {
   const parsedRouterInfo = routerInfo;
 
-  console.log('router Information', routerInfo);
-
   return (
     <Provider store={store}>
       <Helmet
