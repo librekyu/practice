@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import withRedux from 'next-redux-wrapper';
 import Helmet from 'react-helmet';
@@ -11,9 +11,6 @@ import Util from '../src/util/Util';
 import rootReducer from '../src/reducer';
 import rootSaga from '../src/sagas';
 import Layout from '../src/components/layout';
-
-require('react-app-polyfill/ie9');
-require('react-app-polyfill/stable');
 
 const ReactStudy = ({ Component, store, pageProps, routerInfo }) => {
   const parsedRouterInfo = routerInfo;
@@ -49,11 +46,6 @@ const ReactStudy = ({ Component, store, pageProps, routerInfo }) => {
           content: 'text/html;charset=utf-8',
         }]}
       >
-        <script
-          type='text/javascript'
-          src='https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.20.0/polyfill.min.js'/>
-
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3"/>
 
       </Helmet>
       <Layout>

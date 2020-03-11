@@ -16,10 +16,12 @@
   "author": "flamy_vibes_forever",
   "license": "MIT",
   "dependencies": {
+    "@babel/polyfill": "^7.8.7",
     "@next/bundle-analyzer": "^9.0.7",
     "@zeit/next-css": "^1.0.1",
     "axios": "^0.19.2",
     "core-js": "^2.6.11",
+    "dotenv": "^8.2.0",
     "immer": "^5.3.4",
     "next": "^9.0.5",
     "next-build-id": "^3.0.0",
@@ -36,7 +38,8 @@
     "react-scripts": "^3.1.2",
     "redux": "^4.0.4",
     "redux-saga": "^1.0.5",
-    "styled-components": "^4.4.1"
+    "styled-components": "^4.4.1",
+    "webpack": "^4.40.2"
   },
   "devDependencies": {
     "eslint": "^6.4.0",
@@ -45,8 +48,7 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^2.0.1",
     "extract-text-webpack-plugin": "^3.0.2",
-    "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.40.2"
+    "uglifyjs-webpack-plugin": "^2.2.0"
   },
   "eslintConfig": {
     "extends": "react-app"
