@@ -5,7 +5,7 @@ import { ServerStyleSheet } from 'styled-components';
 import PropTypes from 'prop-types';
 
 class MyDocument extends Document {
-  static getInitialProps(context) {]
+  static getInitialProps(context) {
     const sheet = new ServerStyleSheet();
     const page = context.renderPage((App) => (props) => sheet.collectStyles(<App {...props} />));
     const styleTags = sheet.getStyleElement();
