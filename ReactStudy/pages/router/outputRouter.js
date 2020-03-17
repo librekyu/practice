@@ -1,12 +1,10 @@
 import React from 'react';
-import Home from '../index';
+import { COMMON_MESSAGE } from '../../src/const/commonMessage';
 
 const OutputRouter = (props) => {
-  const welcomeString = 'output Router';
-
   return (
     <>
-      {welcomeString}
+      {COMMON_MESSAGE.OUTPUT_ROUTER_WELCOME_STRING}
     </>
   );
 };

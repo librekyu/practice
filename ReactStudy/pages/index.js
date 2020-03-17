@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
 import Router from 'next/router';
+import { COMMON_MESSAGE } from '../src/const/commonMessage';
 
 const Home = (props) => {
-  const welcomeString = 'Hello';
-
   const onClickButton = useCallback((e) => {
     e.preventDefault();
     Router.push('/router/inputRouter');
@@ -11,7 +10,7 @@ const Home = (props) => {
 
   return (
     <>
-      {welcomeString}
+      {COMMON_MESSAGE.INDEX_WELCOME_STRING}
       <br/>
       <button onClick={onClickButton}>To inputRouter</button>
     </>

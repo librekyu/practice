@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import Router from 'next/router';
-import Home from '../index';
+import { COMMON_MESSAGE } from '../../src/const/commonMessage';
 
 const InputRouter = (props) => {
-  const welcomeString = 'input Router';
-
   useEffect(() => {
     console.log('input Router mount');
 
@@ -20,7 +18,7 @@ const InputRouter = (props) => {
 
   return (
     <>
-      {welcomeString}
+      {COMMON_MESSAGE.INPUT_ROUTER_WELCOME_STRING}
       <br/>
       <button onClick={onClickButton}>To outputRouter</button>
     </>
