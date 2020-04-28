@@ -47,7 +47,7 @@ const CardPay = () => {
 
   const initialCardPayInfo = {
     cardNumber: '',
-    defaultMoney: '',
+    defaultMoney: 0,
     claimMoney: 0,
     payMoney: 0,
     payMethod: '',
@@ -71,7 +71,7 @@ const CardPay = () => {
 
     setTransferInfo((prev) => ({
       ...prev,
-      [name]: (name === cardPayInfoMap.inputCash.name || name === cardPayInfoMap.charge.name || name === cardPayInfoMap.sum.name) ? Util.numberWithoutCommas(value) : value
+      [name]: (name === cardPayInfoMap.defaultMoney.name || name === cardPayInfoMap.claimMoney.name || name === cardPayInfoMap.payMoney.name) ? Util.numberWithoutCommas(value) : value
     }));
   }, []);
 
@@ -80,8 +80,7 @@ const CardPay = () => {
     phase === 0 && setPhase(1);
     if (phase === 1) {
       setShowLoading(true);
-      setLoadingStatement(<>{cardPayInfo.mobileNumber}의 계좌에서<br/>{cardPayInfo.inAccountBank}({cardPayInfo.inAccountNumber}) 님 계좌로<br/> 이체
-        중입니다.</>);
+      setLoadingStatement(<>신용카드 결제 중입니다</>);
       setTimeout((e) => {
         setShowLoading(false);
         setPhase(2);
@@ -95,6 +94,7 @@ const CardPay = () => {
     setPhase(0);
     setLoadingStatement('');
     setTransferInfo(initialCardPayInfo);
+    setShowAccount(false);
   }, []);
 
   const handleShow = useCallback((e) => {
@@ -105,7 +105,7 @@ const CardPay = () => {
   const renderAccountList = useCallback(() => {
     const options = accountList.map((account, index) => <option key={index} value={account}>{account}</option>);
     return (
-      <select name={cardPayInfoMap.outAccountNumber.name} value={cardPayInfo.outAccountNumber} onChange={handleInputCashInfoChange}>
+      <select name={cardPayInfoMap.accountNumber.name} value={cardPayInfo.accountNumber} onChange={handleInputCashInfoChange}>
         {options}
       </select>
     );
@@ -121,7 +121,7 @@ const CardPay = () => {
       <div className='inner'>
         <div id='contents' className='noLnb'>
           <div className='subTop'>
-            <h3>계좌 이체</h3>
+            <h3>카드: 신용카드 결제</h3>
           </div>
           <form>
             {
@@ -131,7 +131,7 @@ const CardPay = () => {
                   <span className='required' style={requireStyle}>*</span>&nbsp;가 표시된 필수 입력 항목입니다.
                 </p>
                 <br/><br/>
-                <h3>이체 정보</h3>
+                <h3>결제 정보</h3>
               </div>
             }
 
@@ -192,10 +192,10 @@ const CardPay = () => {
                         </select>
                         </td>
                       </tr>
-                      {cardPayInfo.payMethod === 'cash' &&
+                      {cardPayInfo.payMethod === 'account' &&
                       <tr>
-                        <th scope='row'><span className='required' style={requireStyle}>*</span>&nbsp;{cardPayInfoMap.payMethod.label}</th>
-                        <td>{renderAccountList}</td>
+                        <th scope='row'><span className='required' style={requireStyle}>*</span>&nbsp;{cardPayInfoMap.accountNumber.label}</th>
+                        <td>{renderAccountList()}</td>
                       </tr>
                       }
                       <tr>
@@ -235,9 +235,7 @@ const CardPay = () => {
                   </table>
                 </div> :
                 <div>
-                  {cardPayInfo.mobileNumber} 님의 계좌에서
-                  <br/><b>{cardPayInfo.inAccountBank} ({cardPayInfo.inAccountNumber})</b>의 계좌로
-                  <br/> <b>{cardPayInfo.inputCash} 원</b> 이체 완료 되었습니다.
+                  <b>신용카드 결제가 완료 되었습니다.</b>
                 </div>
 
             }
