@@ -82,7 +82,7 @@ export const mainMenus = [
       {
         key: ['MENU_CARD_RECEIVE'],
         label: '카드 수령',
-        link: '/card/receive',
+        link: '/card/receiveCard',
       },
       {
         key: ['MENU_CARD_PAY'],
