@@ -186,6 +186,49 @@ class Util {
     }
   };
   /**
+   * 전화번호 자동 하이픈
+   * @author kimhg
+   * @param {String} x
+   * @return {String}
+   * */
+  static numberWithSpace = (x) => {
+    if(x){
+      let value = '';
+      if(x.length >= 4 && x.length < 7) {
+        value += x.substr(0, 3);
+        value += " ";
+        value += x.substr(3);
+      } else if(x.length < 11) {
+        value += x.substr(0, 3);
+        value += " ";
+        value += x.substr(3, 3);
+        value += " ";
+        value += x.substr(6);
+      } else {
+        value += x.substr(0, 3);
+        value += " ";
+        value += x.substr(3, 4);
+        value += " ";
+        value += x.substr(7);
+      }
+
+      return value;
+    }
+  };
+  /**
+   * 전화번호 자동 하이픈
+   * @author kimhg
+   * @param {String} x
+   * @return {String}
+   * */
+  static numberWithoutSpace = (x) => {
+    if (x) {
+      const value = typeof x !== 'string' ? x.toString() : x;
+      return value.replace(/ /g, '');
+    }
+  }
+
+  /**
    * 백분율 환산
    * @author redbeanv
    * @param {Number} x

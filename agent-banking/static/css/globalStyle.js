@@ -4,6 +4,14 @@
 import styled, { createGlobalStyle } from 'styled-components';
 import { ADMIN_CONST, USER_CONST } from '../../src/common/globalConst';
 
+export const Overlay = styled.div`
+  display: ${props => props.show ? 'block' : 'none'};
+  position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:${props => props.zIndex ? props.zIndex : 1000};
+  @media all and (max-width:768px){
+    z-index: 1000;
+  }
+`;
+
 const GlobalStyle = createGlobalStyle`
   @charset "utf-8";
   
@@ -344,7 +352,7 @@ span.tableControl a.btn_next{margin-left:20px;}
 html{}
 body{}
 #wrap{min-width:1200px;}
-#wrap.main{background:url(${USER_CONST.BASE_IMAGE_PATH}/common/bg_mainVisual.png) no-repeat center top;background-size:contain;}
+//#wrap.main{background:url(${USER_CONST.BASE_IMAGE_PATH}/common/bg_mainVisual.png) no-repeat center top;background-size:contain;}
 #wrap.main:before{display:block;content:'';position:absolute;top:0;left:0;right:0;height:810px;background:#ebebeb;z-index:-1;}
 #wrap.main #header *{color:#000;}
 #wrap.main #header .topNav li:after{border-color:#fff;}
@@ -1145,6 +1153,9 @@ ul.mypageMain > li > a > span{display:block;padding:10px 0;font-size:16px;color:
 #loading > div:before{z-index:1001;animation:spin 0.8s infinite linear;}
 #loading > div:after{border:10px solid #ccc;}
 #loading p.loadingCon{position:relative;margin-top:20px;line-height:30px;font-size:18px;color:#ccc;text-align:center;z-index:1001;}
+
+.imgInsertBox{margin-left:20px; position:relative;min-width:120px;min-height:70px;text-align:center;border:1px #e1e1e1 solid;box-sizing:border-box;}
+.imgInsertBox .bg{display:block;position:absolute;top:50%;left:10px;right:10px;margin-top:-35px;padding-top:50px;font-size:13px;text-align:center;line-height:120%;background:url(/static/images/admin/common/icon_img.png) no-repeat center top;}
 @keyframes spin{
   0%{-webkit-transform:rotate(0deg);-ms-transform:rotate(0deg);-o-transform:rotate(0deg);transform:rotate(0deg);}
   100%{-webkit-transform:rotate(360deg);-ms-transform:rotate(360deg);-o-transform:rotate(360deg);transform:rotate(360deg);}
@@ -1491,59 +1502,10 @@ ul.mypageMain > li > a > span{display:block;padding:10px 0;font-size:16px;color:
     .modalWrap.alert .modalContent{padding-bottom:30px;}
     .alertText{padding:60px 0 30px;font-size:14px;line-height:160%;background-size:auto 50px !important;}
     .infoText{padding:0 0 30px;font-size:14px;line-height:160%;}
-}}`;
-
-export const AdminContents = styled.div`
-  margin:0 20px 20px 200px;transition-duration:0.3s;
-  & h2{padding-left:42px;font-size:26px;font-weight:800;color:#b4b4b4;line-height:70px;}
-  & .contentBox{padding:10px;background:#fff;box-sizing:border-box;}
-  & .titleBar{position:relative;margin-bottom:10px;min-height:30px;line-height:30px;}
-  & .titleBar h2,
-  & .titleBar h3,
-  & .titleBar h4,
-  & .titleBar h5,
-  & .titleBar h6{display:inline;}
-  & .titleBar:after{display:block;content:'';clear:both;}
-  & .titleBar h4{font-size:15px;}
-  & .titleBar h4 img{margin-right:5px;}
-  & .titleBar .left{float:left;}
-  & .titleBar .left *{vertical-align:top;}
-  & .titleBar .right{display:block;float:right;font-size:13px;line-height:30px;}
-  & .titleBar .right *{vertical-align:top;}
-  & .titleBar.bordered{padding:10px;border:1px #e1e1e1 solid;}
-  & .location{display:block;font-size:13px;text-align:right;line-height:30px;}
-  & .location a{font-size:13px;}
-  & .contentBox .tabBar{display:block;margin-bottom:20px;height:40px;border-bottom:1px #e1e1e1 solid;}
-  & .contentBox .tabBar li{display:block;float:left;}
-  & .contentBox .tabBar li a{display:block;position:relative;padding:0 20px;font-size:13px;line-height:40px;}
-  & .contentBox .tabBar li.active a{color:#30991c;}
-  & .contentBox .tabBar li.active a:after{display:block;content:'';position:absolute;bottom:0;left:0;right:0;border-bottom:3px #30991c solid;}
-  & .dashboard h2{padding-top:30px;}
-  & .dashboard .titleBar{margin-bottom:0;padding:10px 0 20px 0;border-bottom:1px #e1e1e1 solid;}
-  & .dashboard .titleBar .right{top:10px;}
-  & .dashboardTab .dashboardItem .titleBar{position:relative;padding:0;min-height:40px;line-height:40px;border-bottom:1px #e1e1e1 solid;}
-  & .dashboardTab .dashboardItem .titleBar h4{display:block;font-size:16px;font-weight:800;padding-left:22px;}
-  & .dashboardTab .dashboardItem .titleBar .date{display:block;position:absolute;top:0;right:20px;font-size:12px;}
-  
-  .mapArea{position:relative;}
-  
-  & .imgViewBox{position:relative;min-width:120px;min-height:70px;text-align:center;border:1px #e1e1e1 solid;box-sizing:border-box;}
-  & .imgViewBox img{width:100%;height:100%;}
-  & .imgInsertBox{position:relative;min-width:120px;min-height:70px;text-align:center;border:1px #e1e1e1 solid;box-sizing:border-box;}
-  & .imgInsertBox .bg{display:block;position:absolute;top:50%;left:10px;right:10px;margin-top:-35px;padding-top:50px;font-size:13px;text-align:center;line-height:120%;background:url(/static/admin/images/common/icon_img.png) no-repeat center top;}
-  & .imgChangeBox{position:relative;min-width:120px;min-height:70px;text-align:center;background:#ececec;border:1px #d3d3d3 solid;box-sizing:border-box;}
-  & .imgChangeBox .bg{display:block;position:absolute;top:50%;left:10px;right:10px;margin-top:-25px;padding-top:30px;font-size:13px;text-align:center;line-height:120%;background:url(/static/admin/images/common/icon_img_s.png) no-repeat center top;}
-  & .imgDesc{display:block;padding-left:24px;line-height:140%;background:url(/static/admin/images/common/icon_info.png) no-repeat left top;}
-  & .imgInsertBox + .imgDesc,
-  & .imgChangeBox + .imgDesc{margin-top:30px;}
-`;
-
-export const Overlay = styled.div`
-  display: ${props => props.show ? 'block' : 'none'};
-  position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:${props => props.zIndex ? props.zIndex : 1000};
-  @media all and (max-width:768px){
-    z-index: 1000;
-  }
-`;
+    
+    
+   
+}
+}`;
 
 export default GlobalStyle;

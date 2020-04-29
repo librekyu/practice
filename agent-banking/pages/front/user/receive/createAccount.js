@@ -1,71 +1,68 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import fs from 'fs';
 import AddressSearchInput from '../../../../src/components/common/userAddressSearchInput';
 import Router from 'next/router';
 import { USER_CONST } from '../../../../src/common/globalConst';
 import Loading from '../../../../src/components/user/common/Loading';
+import DUMMY from '../../../../src/common/dummyConst';
+import Util from '../../../../src/common/util';
 
 const CreateAccount = () => {
 
   const joinAccountInfoMap = {
     identification: {
       name: 'identification',
-      required: true,
-      label: '신분증'
+      label: 'Identification'
+    },
+    attachment: {
+      name: 'attachment',
+      label: 'Attachment'
     },
     id: {
       name: 'id',
-      required: true,
-      label: '아이디'
+      label: 'SO No'
     },
     userName: {
       name: 'userName',
-      required: true,
-      label: '이름'
+      label: 'Name'
     },
     birth: {
       name: 'birth',
-      required: true,
-      label: '생년월일'
+      label: 'Birthday'
     },
     expiration: {
       name: 'expiration',
-      required: true,
-      label: '만기일자'
+      label: 'Exp day'
     },
     mobileNumber: {
       name: 'mobileNumber',
-      required: true,
-      label: '휴대폰 번호'
+      label: 'Tel No.'
     },
     address: {
       name: 'address',
-      required: true,
-      label: '주소'
+      label: 'Address'
     },
     detailAddress: {
       name: 'detailAddress',
-      required: true,
-      label: '상세 주소'
+      label: 'Detail Address'
     },
     nationality: {
       name: 'nationality',
-      required: true,
       label: '국적'
     },
     agentOTP: {
       name: 'Agent OTP',
-      required: true,
       label: 'Agent OTP'
     },
     customerPIN: {
       name: 'customerPIN',
-      required: true,
       label: '고객 PIN'
     }
   };
 
   const initialJoinAccountInfo = {
     identification: '',
+    attachment: '',
     id: '',
     userName: '',
     mobileNumber: '',
@@ -77,25 +74,36 @@ const CreateAccount = () => {
     customerPIN: '',
   };
 
+  const fileRef = useRef();
+
   const [phase, setPhase] = useState(0);
   const [joinInfo, setJoinInfo] = useState(initialJoinAccountInfo);              // 회원입력정보
-  const [addressInput, setAddressInput] = useState('');                 // KAKAO 주소 검색 response 값
   const [showLoading, setShowLoading] = useState(false);
   const [loadingStatement, setLoadingStatement] = useState('');
+  const [fileList, setFileList] = useState('');
+
+  useEffect(() => {
+    return () => {
+      setPhase(0);
+      setLoadingStatement('');
+      setJoinInfo(initialJoinAccountInfo);
+      setFileList('');
+    };
+  }, []);
 
   const handleInputJoinInfoChange = useCallback((e) => {
     const { name, value } = e.target;
 
     setJoinInfo((prev) => ({
       ...prev,
-      [name]: value
+      [name]: name === 'mobileNumber' ? Util.numberWithoutSpace(value) : value
     }));
   }, [joinInfo]);
 
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
     phase === 0 && setPhase(1);
-    if(phase === 1){
+    if (phase === 1) {
       setShowLoading(true);
       setLoadingStatement('신분증 전송 중');
       setTimeout((e) => {
@@ -113,31 +121,92 @@ const CreateAccount = () => {
     Router.push(`${USER_CONST.BASE_ROUTER_PATH}/main`);
     setPhase(0);
     setLoadingStatement('');
-    setAddressInput('');
     setJoinInfo(initialJoinAccountInfo);
+    setFileList([]);
   }, []);
+
+  const onClickDemo = useCallback((e) => {
+    e.preventDefault();
+    if(phase === 0){
+      setJoinInfo((prev) => ({
+        ...prev,
+        identification: DUMMY.IDENTIFICATION_IMG,
+        id: DUMMY.ID,
+        userName: DUMMY.NAME,
+        mobileNumber: DUMMY.PHONE_NUMBER,
+        expiration: DUMMY.EXPIRATION,
+        birth: DUMMY.BIRTH,
+        address: DUMMY.ADDRESS,
+        detailAddress: DUMMY.DETAIL_ADDRESS,
+        nationality: DUMMY.NATIONALITY,
+
+      }));
+
+      setFileList(DUMMY.FILE_NAME);
+    }
+
+    phase === 1 && setJoinInfo((prev) => ({
+      ...prev,
+      agentOTP: DUMMY.AGENT_OTP,
+      customerPIN: DUMMY.CLIENT_PIN,
+    }));
+  }, [phase]);
+
+  const onClickAddAttachment = useCallback((e) => {
+    e.preventDefault();
+    fileRef.current.click();
+  }, []);
+
+  const onChangeFileList = useCallback((e) => {
+    const reader = new FileReader();
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    reader.onloadend = (e) => {
+      setFileList(file.name);
+    };
+
+    reader.readAsDataURL(file);
+
+  }, []);
+
+  const renderFileList = useCallback(() => {
+    return (
+      <label>{fileList}</label>);
+  }, [fileList]);
 
   const requireStyle = {
     fontWeight: 'bold',
     color: '#ed1c24'
   };
+  // fs.readdir('./', (err, fileList) =>{console.log(fileList.toString())});
 
   return (
     <>
       <div className='inner'>
         <div id='contents' className='noLnb'>
           <div className='subTop'>
-            <h3>계좌 개설</h3>
+            <h3>Create Account</h3>
           </div>
           <form>
             {
               phase !== 2
-              && <div className='joinFormTitle'>
+              &&
+              <div className='joinFormTitle left'>
                 <p className='explanRequire'>
-                  <span className='required' style={requireStyle}>*</span>&nbsp;가 표시된 필수 입력 항목입니다.
+                  <span className='required' style={requireStyle}>*</span>&nbsp; is necessary
                 </p>
                 <br/><br/>
-                <h3>가입자 정보</h3>
+                <h3>Member Info</h3>
+                <button
+                  className={'btn_l'}
+                  style={{
+                    float: 'right',
+                    marginBottom: '10px'
+                  }}
+                  onClick={onClickDemo}>demo
+                </button>
               </div>
             }
 
@@ -153,38 +222,45 @@ const CreateAccount = () => {
                     <th scope='row'><span className='required' style={requireStyle}>*</span>&nbsp;{joinAccountInfoMap.identification.label}
                     </th>
                     <td>
-                      <input type='text' name={joinAccountInfoMap.identification.name} value={joinInfo.identification}
-                             onChange={handleInputJoinInfoChange}
-                             className='w30p'
-                      />
+                      {joinInfo.identification ? <img src={joinInfo.identification} alt={''}/> :
+                        <div className="imgInsertBox w50p h300"><span className="bg">Identification</span></div>}&nbsp;
+                      <br/>
+                      <button className={'btn_l'}>Add Identification</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope='row'><span className='required' style={requireStyle}>*</span>&nbsp;{joinAccountInfoMap.attachment.label}
+                    </th>
+                    <td>
+                      <input type={'file'} style={{ display: 'none' }} ref={fileRef} onChange={onChangeFileList}/>
+                      {renderFileList()}&nbsp;
+                      <button className={'btn_l'} onClick={onClickAddAttachment}>Add attachment</button>
                     </td>
                   </tr>
                   <tr>
                     <th><span className='required' style={requireStyle}>*</span>&nbsp;{joinAccountInfoMap.userName.label}</th>
-                    <td><input type='text' name={joinAccountInfoMap.userName.name} value={joinInfo.userName}
+                    <td><input type='text' name={joinAccountInfoMap.userName.name} value={joinInfo.userName || ''}
                                onChange={handleInputJoinInfoChange} className='w30p'/></td>
                   </tr>
                   <tr>
                     <th scope='row'><span className='required' style={requireStyle}>*</span>&nbsp;{joinAccountInfoMap.id.label}</th>
                     <td>
-                      <input type='text' name={joinAccountInfoMap.id.name} value={joinInfo.id}
+                      <input type='text' name={joinAccountInfoMap.id.name} value={joinInfo.id || ''}
                              onChange={handleInputJoinInfoChange}
                              className='w30p'/>
                     </td>
                   </tr>
                   <tr>
                     <th scope='row'><span className='required' style={requireStyle}>*</span>&nbsp;{joinAccountInfoMap.birth.label}</th>
-                    <td><input type='number' name={joinAccountInfoMap.birth.name} value={joinInfo.birth}
+                    <td><input type='text' name={joinAccountInfoMap.birth.name} value={joinInfo.birth || ''}
                                onChange={handleInputJoinInfoChange} className='w50p'/>&nbsp;&nbsp;
-                      <span className='explanEx'>6자리 숫자만 입력(예. 800101)</span>
                     </td>
                   </tr>
 
                   <tr>
                     <th scope='row'><span className='required' style={requireStyle}>*</span>&nbsp;{joinAccountInfoMap.expiration.label}</th>
-                    <td><input type='number' name={joinAccountInfoMap.expiration.name} value={joinInfo.expiration}
+                    <td><input type='text' name={joinAccountInfoMap.expiration.name} value={joinInfo.expiration || ''}
                                onChange={handleInputJoinInfoChange} className='w50p'/>&nbsp;&nbsp;
-                      <span className='explanEx'>6자리 숫자만 입력(예. 800101)</span>
                     </td>
                   </tr>
 
@@ -193,12 +269,11 @@ const CreateAccount = () => {
                     </th>
                     <td>
                       <select className={'w20p'} onChange={handleInputJoinInfoChange} name={joinAccountInfoMap.nationality.name}
-                              value={joinInfo.nationality}>
-                        <option value={''}>선택하세요</option>
-                        <option value={'america'}>미국</option>
-                        <option value={'vietnam'}>베트남</option>
-                        <option value={'china'}>중국</option>
-                        <option value={'kr'}>한국</option>
+                              value={joinInfo.nationality || ''}>
+                        <option value={'viet'}>Vietnam</option>
+                        <option value={'america'}>America</option>
+                        <option value={'ch'}>China</option>
+                        <option value={'kr'}>Korea</option>
                       </select>
                     </td>
                   </tr>
@@ -206,9 +281,9 @@ const CreateAccount = () => {
                   <tr>
                     <th scope='row'><span className='required' style={requireStyle}>*</span>&nbsp;{joinAccountInfoMap.mobileNumber.label}
                     </th>
-                    <td><input type='number' name={joinAccountInfoMap.mobileNumber.name} value={joinInfo.mobileNumber}
+                    <td><input type='text' name={joinAccountInfoMap.mobileNumber.name}
+                               value={Util.numberWithSpace(joinInfo.mobileNumber) || ''}
                                onChange={handleInputJoinInfoChange} className='w50p'/>&nbsp;&nbsp;
-                      <span className='explanEx'>숫자만 입력</span>
                     </td>
                   </tr>
 
@@ -216,10 +291,17 @@ const CreateAccount = () => {
                     <th scope='row' className='noLine'><span className='required'
                                                              style={requireStyle}>*</span>&nbsp;{joinAccountInfoMap.address.label}</th>
                     <td className='noLine'>
-                      <AddressSearchInput
-                        addressInput={addressInput}
-                        setAddressInput={setAddressInput}
-                        setInfo={setJoinInfo}
+                      {/*<AddressSearchInput*/}
+                      {/*  addressInput={addressInput}*/}
+                      {/*  setAddressInput={setAddressInput}*/}
+                      {/*  setInfo={setJoinInfo}*/}
+                      {/*/>*/}
+                      <input
+                        type='text'
+                        name={joinAccountInfoMap.address.name}
+                        value={joinInfo.address || ''}
+                        onChange={handleInputJoinInfoChange}
+                        className='w70p'
                       />
                     </td>
                   </tr>
@@ -230,7 +312,7 @@ const CreateAccount = () => {
                       <input
                         type='text'
                         name={joinAccountInfoMap.detailAddress.name}
-                        value={joinInfo.detailAddress}
+                        value={joinInfo.detailAddress || ''}
                         onChange={handleInputJoinInfoChange}
                         className='w70p'
                       />
@@ -251,7 +333,7 @@ const CreateAccount = () => {
                       <th scope='row'><span className='required' style={requireStyle}>*</span>&nbsp;{joinAccountInfoMap.agentOTP.label}
                       </th>
                       <td>
-                        <input type='password' name={joinAccountInfoMap.agentOTP.name} value={joinInfo.agentOTP}
+                        <input type='password' name={joinAccountInfoMap.agentOTP.name} value={joinInfo.agentOTP || ''}
                                onChange={handleInputJoinInfoChange}
                                className='w30p'
                         />
@@ -259,39 +341,29 @@ const CreateAccount = () => {
                     </tr>
                     <tr>
                       <th><span className='required' style={requireStyle}>*</span>&nbsp;{joinAccountInfoMap.customerPIN.label}</th>
-                      <td><input type='password' name={joinAccountInfoMap.customerPIN.name} value={joinInfo.customerPIN}
+                      <td><input type='password' name={joinAccountInfoMap.customerPIN.name} value={joinInfo.customerPIN || ''}
                                  onChange={handleInputJoinInfoChange} className='w30p'/></td>
                     </tr>
                     </tbody>
                   </table>
                 </div> :
-                <div>{joinInfo.userName} 님의 계좌번호 <b>1111-2222-3333</b>
-                  계좌개설이 완료되었습니다.
+                <div>Creating account is complete for {joinInfo.userName} <b>{DUMMY.ACCOUNT_NUMBER}</b>
                 </div>
 
             }
 
             {phase !== 2 ?
               <>
-                <div className='explanFoot'>
-                  <strong>개인정보 입력 및 관리 안내</strong>
-                  <br/><br/>
-                  <p>입력하신 정보는 에이전트 뱅킹 서비스 이용에 사용됩니다.<br/>
-                    잘못된 정보로인하여 서비스 이용에 불편할 수 있사오니 가급적 정확하게 입력하여주시기 바랍니다.<br/>
-                    입력된 개인정보는 '마이페이지 > 개인정보관리'에서 수정할 수 있습니다.<br/>
-                    소중한 개인정보는 개인정보 관리방침에 따라 안전하게 관리됩니다.<br/>
-                  </p>
-                </div>
                 <br/><br/>
                 <div className='btnArea'>
-                  <button onClick={handleSubmit} className='btn_l on'>다음</button>
+                  <button onClick={handleSubmit} className='btn_l on'>Next</button>
                   &nbsp;
-                  <button onClick={handleCancel} className='btn_l'>계좌개설 취소</button>
+                  <button onClick={handleCancel} className='btn_l'>Cancel Create Account</button>
                 </div>
               </>
               :
               <div className='btnArea'>
-                <button onClick={handleCancel} className='btn_l'>메인화면으로 돌아가기</button>
+                <button onClick={handleCancel} className='btn_l'>To Main</button>
               </div>
             }
           </form>
