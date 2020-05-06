@@ -4,6 +4,7 @@ import { USER_CONST } from '../../../../src/common/globalConst';
 import Loading from '../../../../src/components/user/common/Loading';
 import { useSelector } from 'react-redux';
 import Util from '../../../../src/common/util';
+import DUMMY from '../../../../src/common/dummyConst';
 
 const OtherSend = () => {
 
@@ -54,9 +55,9 @@ const OtherSend = () => {
     accountNumber: '',
     inputCash: 0,
     inputCashVND: 0,
-    charge: 1000,
+    charge: DUMMY.CHARGE,
     sum: '',
-    agentName: '',
+    agentName: DUMMY.AGENT,
     agentOTP: '',
     customerPIN: '',
     balance: '',
@@ -75,7 +76,7 @@ const OtherSend = () => {
 
     setInputCashInfo((prev) => ({
       ...prev,
-      [name]: (name === OtherSendInfoMap.inputCash.name || name === OtherSendInfoMap.charge.name || name === OtherSendInfoMap.sum.name) ? Util.numberWithoutCommas(value) : value
+      [name]: (name === OtherSendInfoMap.inputCash.name || name === OtherSendInfoMap.charge.name || name === OtherSendInfoMap.sum.name || name === OtherSendInfoMap.outputCash.name) ? Util.numberWithoutCommas(value) : value
     }));
   }, []);
 
@@ -84,7 +85,7 @@ const OtherSend = () => {
     phase === 0 && setPhase(1);
     if (phase === 1) {
       setShowLoading(true);
-      setLoadingStatement(<>{inputCashInfo.mobileNumber} 님 계좌에서<br/>Agent ({userInfo.username})의 계좌로 이체중입니다.</>);
+      setLoadingStatement(<>{inputCashInfo.mobileNumber} 님 계좌에서<br/>Agent ({inputCashInfo.agentName})의 계좌로 이체중입니다.</>);
       setTimeout((e) => {
         setShowLoading(false);
         setPhase(2);
@@ -100,6 +101,25 @@ const OtherSend = () => {
     setInputCashInfo(initialInputCashInfo);
   }, []);
 
+  const onClickDemo = useCallback((e) => {
+    e.preventDefault();
+    if (phase === 0) {
+      setInputCashInfo((prev) => ({
+        ...prev,
+        mobileNumber: DUMMY.PHONE_NUMBER,
+        accountNumber: DUMMY.ACCOUNT_NUMBER,
+        inputCash: DUMMY.SEND_INPUT_MONEY,
+        outputCash: DUMMY.SEND_OUTPUT_MONEY,
+      }));
+    }
+
+    phase === 1 && setInputCashInfo((prev) => ({
+      ...prev,
+      agentOTP: DUMMY.AGENT_OTP,
+      customerPIN: DUMMY.CLIENT_PIN,
+    }));
+  }, [phase]);
+
   const requireStyle = {
     fontWeight: 'bold',
     color: '#ed1c24'
@@ -111,6 +131,16 @@ const OtherSend = () => {
         <div id='contents' className='noLnb'>
           <div className='subTop'>
             <h3>타발 송금 지급</h3>
+            {phase !==2 &&
+            <button
+              className={'btn_l'}
+              style={{
+                float: 'right',
+                marginBottom: '10px'
+              }}
+              onClick={onClickDemo}>demo
+            </button>
+            }
           </div>
           <form>
             {
@@ -199,7 +229,7 @@ const OtherSend = () => {
                   </tr>
                   <tr>
                     <th scope='row'>Agent</th>
-                    <td><b>{userInfo.username}</b></td>
+                    <td><b>{inputCashInfo.agentName}</b></td>
                   </tr>
                   </tbody>
                 </table>
@@ -230,9 +260,9 @@ const OtherSend = () => {
                     </tbody>
                   </table>
                 </div> :
-                <div><b>{inputCashInfo.accountNumber}</b>의 계좌에서 Agent ({userInfo.username}) 님의 계좌로
-                  <br/> <b>{inputCashInfo.inputCash} 원</b> 입금이 완료 되었습니다.
-                </div>
+                <text><text className={'empha'}>{inputCashInfo.accountNumber}</text>의 계좌에서 <text className={'empha'}>Agent ({inputCashInfo.agentName})</text> 님의 계좌로
+                  <br/><br/><br/> <text className={'empha'}>{inputCashInfo.inputCash} 원</text> 입금이 완료 되었습니다.
+                </text>
 
             }
 
@@ -241,7 +271,7 @@ const OtherSend = () => {
                 <div className='btnArea'>
                   <button onClick={handleSubmit} className='btn_l on'>다음</button>
                   &nbsp;
-                  <button onClick={handleCancel} className='btn_l'>현금 입금 취소</button>
+                  <button onClick={handleCancel} className='btn_l'>타발 송금 지급 취소</button>
                 </div>
               </>
               :

@@ -124,6 +124,13 @@ input[type='checkbox'] + label{display:inline-block;margin-right:20px;}
 input[readonly]{background-color:#ececec;}
 
 /* ==============================================================================================================
+= Text
+= 
+============================================================================================================== */
+text{font-size:20px;}
+.empha{font-size:30px;}
+
+/* ==============================================================================================================
 = Button 기본스타일 지정
 = 사이즈 : btn_ss < btn_s < btn_inline < btn_m < btn_l
 ============================================================================================================== */
@@ -352,7 +359,7 @@ span.tableControl a.btn_next{margin-left:20px;}
 html{}
 body{}
 #wrap{min-width:1200px;}
-#wrap.main{background:url(${USER_CONST.BASE_IMAGE_PATH}/common/bg_mainVisual.png) no-repeat center top;background-size:contain;}
+#wrap.main{background:url(${USER_CONST.BASE_IMAGE_PATH}/common/bg_mainVisual.png) no-repeat center top;background-size:cover;}
 #wrap.main:before{display:block;content:'';position:absolute;top:0;left:0;right:0;height:810px;background:#ebebeb;z-index:-1;}
 #wrap.main #header *{color:#000;}
 #wrap.main #header .topNav li:after{border-color:#fff;}

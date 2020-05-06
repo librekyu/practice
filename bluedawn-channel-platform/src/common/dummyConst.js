@@ -20,7 +20,8 @@ const DUMMY = {
   AGENT_OTP: 123456,
   CLIENT_PIN: 123456,
 
-
+  SEND_INPUT_MONEY: '5000',
+  SEND_OUTPUT_MONEY: '35000',
 };
 
 export default DUMMY;

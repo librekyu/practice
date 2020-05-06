@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import AddressSearchInput from '../../../../src/components/common/userAddressSearchInput';
 import Router from 'next/router';
 import { USER_CONST } from '../../../../src/common/globalConst';
 import Loading from '../../../../src/components/user/common/Loading';
@@ -7,6 +6,7 @@ import Util from '../../../../src/common/util';
 import TableComponent from '../../../../src/components/common/jsmartTable';
 import { NoticeList } from '../../../../src/models/user/posts/Notice';
 import Pagination from '../../../../src/components/common/jsmartPagination';
+import DUMMY from '../../../../src/common/dummyConst';
 
 const ShowAccount = () => {
 
@@ -54,15 +54,6 @@ const ShowAccount = () => {
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
     phase === 0 && setPhase(1);
-    phase === 1 && setShowLoading(true)
-    && setLoadingStatement('신분증 전송 중')
-    && setTimeout((e) => {
-      setLoadingStatement('계좌 개설 진행중');
-    }, 2500)
-    && setTimeout((e) => {
-      setShowLoading(false);
-      setPhase(2);
-    }, 5000);
   }, [accountInfo, phase]);
 
   const handleShow = useCallback((e) => {
@@ -82,6 +73,22 @@ const ShowAccount = () => {
     setAfterAuth(false);
   }, []);
 
+  const onClickDemo = useCallback((e) => {
+    e.preventDefault();
+    if(!afterAuth){
+      setAccountInfo((prev) => ({
+        ...prev,
+        mobileNumber: DUMMY.PHONE_NUMBER
+      }));
+    }
+    if (phase === 0) {
+      setAccountInfo((prev) => ({
+        ...prev,
+        customerPIN: DUMMY.CLIENT_PIN
+      }));
+    }
+  }, [phase]);
+
   const requireStyle = {
     fontWeight: 'bold',
     color: '#ed1c24'
@@ -93,6 +100,16 @@ const ShowAccount = () => {
         <div id='contents' className='noLnb'>
           <div className='subTop'>
             <h3>계좌 조회</h3>
+            {phase !==1 &&
+            <button
+              className={'btn_l'}
+              style={{
+                float: 'right',
+                marginBottom: '10px'
+              }}
+              onClick={onClickDemo}>demo
+            </button>
+            }
           </div>
           <form>
             <br/>
@@ -168,10 +185,10 @@ const ShowAccount = () => {
               </div>
               <TableComponent
               dataProps={(new NoticeList()).getMapToNoticeListData()}
-              totalCount={1}
+              totalCount={4}
               />
 
-              <Pagination currentPage={1} totalCount={1} onChange={undefined}/>
+              <Pagination currentPage={1} totalCount={4} onChange={undefined}/>
               </>
             }
             <div className='btnArea'>
@@ -184,7 +201,6 @@ const ShowAccount = () => {
           </form>
         </div>
       </div>
-      <Loading isLoading={showLoading} label={loadingStatement}/>
     </>
   );
 };

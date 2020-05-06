@@ -1,6 +1,6 @@
-# jsmart
+# blue channel platform
 
-중랑구청 스마트시티 프로젝트
+푸른새벽 에이전트 뱅킹 플랫폼 프로젝트
 
 ## Scripts
 

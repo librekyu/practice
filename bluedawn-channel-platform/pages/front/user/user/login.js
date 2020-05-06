@@ -66,12 +66,8 @@ const Login = () => {
     <div className="inner">
       <div id="contents" className="noLnb">
         <div className="subTop">
-          <div className="subLocation">
-            <span><img src={`${USER_CONST.BASE_IMAGE_PATH}/common/icon_home.png`} />&nbsp;홈&nbsp;</span> &gt;
-            <span>로그인</span>
-          </div>
-          <h3>LOGIN</h3>
-          <p>{GLOBAL_CONST.APP_NAME_NORMAL} 로그인</p>
+          <h3>{GLOBAL_CONST.APP_NAME_NORMAL}</h3>
+          <p>LOGIN</p>
         </div>
         <div className="loginForm">
           <form onSubmit={handleLogin}>
@@ -80,7 +76,7 @@ const Login = () => {
                 <input
                   type="text"
                   value={userId}
-                  placeholder="전화번호"
+                  placeholder="Telephone Number"
                   onChange={handleChangeUserId}
                 />
               </li>
@@ -95,7 +91,7 @@ const Login = () => {
               <li>
                 <input
                   className='btn_login'
-                  value='로그인'
+                  value='Login'
                   type='submit'
                   onClick={handleLogin}
                 />
@@ -114,14 +110,14 @@ const Login = () => {
           <br/>
           <a
             className="btn_l btn-join" >
-            회원가입
+            Sign Up
           </a>
           <a
             className="btn_l btn-findId" >
-            아이디 찾기
+            Find ID
           </a>
           <a className="btn_l btn-findPw" >
-            비밀번호 찾기
+            Find P/W
           </a>
         </div>
       </div>

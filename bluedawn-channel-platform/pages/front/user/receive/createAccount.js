@@ -4,6 +4,7 @@ import { USER_CONST } from '../../../../src/common/globalConst';
 import Loading from '../../../../src/components/user/common/Loading';
 import DUMMY from '../../../../src/common/dummyConst';
 import Util from '../../../../src/common/util';
+import LOADING_CONSTANT from '../../../../src/common/constantLoading';
 
 const CreateAccount = () => {
 
@@ -102,9 +103,9 @@ const CreateAccount = () => {
     phase === 0 && setPhase(1);
     if (phase === 1) {
       setShowLoading(true);
-      setLoadingStatement('신분증 전송 중');
+      setLoadingStatement(LOADING_CONSTANT.SENDING_IDENTIFICATION);
       setTimeout((e) => {
-        setLoadingStatement('계좌 개설 진행중');
+        setLoadingStatement(LOADING_CONSTANT.CREATING_ACCOUNT);
       }, 2500);
       setTimeout((e) => {
         setShowLoading(false);
@@ -123,7 +124,7 @@ const CreateAccount = () => {
 
   const onClickDemo = useCallback((e) => {
     e.preventDefault();
-    if(phase === 0){
+    if (phase === 0) {
       setJoinInfo((prev) => ({
         ...prev,
         identification: DUMMY.IDENTIFICATION_IMG,
@@ -148,20 +149,25 @@ const CreateAccount = () => {
 
   const onClickAddIdentification = useCallback((e) => {
     e.preventDefault();
-    fileRef.current.click();
+    imageRef.current.click();
   }, []);
 
   const onChangeImageFile = useCallback((e) => {
     const reader = new FileReader();
     const image = e.target.files[0];
 
-    if(!image) return;
+    if (!image) return;
 
-  reader.onloadend = (e) => {
-    handleInputJoinInfoChange(joinAccountInfoMap.identification.name, e.target.result);
-  };
+    reader.onloadend = (e) => {
+      handleInputJoinInfoChange({
+        target: {
+          name: joinAccountInfoMap.identification.name,
+          value: e.target.result
+        }
+      });
+    };
 
-  reader.readAsDataURL(image);
+    reader.readAsDataURL(image);
 
   }, []);
 
@@ -177,7 +183,12 @@ const CreateAccount = () => {
     if (!file) return;
 
     reader.onloadend = (e) => {
-      handleInputJoinInfoChange(joinAccountInfoMap.attachment.name, file.name);
+      handleInputJoinInfoChange({
+        target: {
+          name: joinAccountInfoMap.attachment.name,
+          value: file.name
+        }
+      });
     };
 
     reader.readAsDataURL(file);
@@ -211,6 +222,7 @@ const CreateAccount = () => {
                 </p>
                 <br/><br/>
                 <h3>Member Info</h3>
+                {phase !== 2 &&
                 <button
                   className={'btn_l'}
                   style={{
@@ -219,6 +231,7 @@ const CreateAccount = () => {
                   }}
                   onClick={onClickDemo}>demo
                 </button>
+                }
               </div>
             }
 
@@ -234,10 +247,13 @@ const CreateAccount = () => {
                     <th scope='row'><span className='required' style={requireStyle}>*</span>&nbsp;{joinAccountInfoMap.identification.label}
                     </th>
                     <td>
+                      <input type={'file'} style={{ display: 'none' }} ref={imageRef} onChange={onChangeImageFile}
+                             accept={'image/png, image/jpeg, image/jpg'}/>
                       {joinInfo.identification ? <img src={joinInfo.identification} alt={''}/> :
-                        <div className="imgInsertBox w50p h300"><span className="bg">Identification</span></div>}&nbsp;
+                        <div className="imgInsertBox w50p h300" onClick={onClickAddIdentification}><span
+                          className="bg">Identification</span></div>}&nbsp;
                       <br/>
-                      <button className={'btn_l'} onClick={onClickAddAttachment}>Add Identification</button>
+                      <button className={'btn_l'} onClick={onClickAddIdentification}>Add Identification</button>
                     </td>
                   </tr>
                   <tr>
@@ -303,11 +319,6 @@ const CreateAccount = () => {
                     <th scope='row' className='noLine'><span className='required'
                                                              style={requireStyle}>*</span>&nbsp;{joinAccountInfoMap.address.label}</th>
                     <td className='noLine'>
-                      {/*<AddressSearchInput*/}
-                      {/*  addressInput={addressInput}*/}
-                      {/*  setAddressInput={setAddressInput}*/}
-                      {/*  setInfo={setJoinInfo}*/}
-                      {/*/>*/}
                       <input
                         type='text'
                         name={joinAccountInfoMap.address.name}
@@ -359,7 +370,13 @@ const CreateAccount = () => {
                     </tbody>
                   </table>
                 </div> :
-                <div>Creating account is complete for {joinInfo.userName} <b>{DUMMY.ACCOUNT_NUMBER}</b>
+                <div>
+                  <text>
+                    <text className={'empha'}>{joinInfo.userName}</text>
+                    님의 계좌개설 신청이 완료 되었습니다.
+                  </text>
+                  <br/><br/><br/>
+                  <h1 style={{ color: '#0072bc' }}>계좌 개설이 완료되면 SMS가 발송됩니다.</h1>
                 </div>
 
             }
@@ -368,14 +385,14 @@ const CreateAccount = () => {
               <>
                 <br/><br/>
                 <div className='btnArea'>
-                  <button onClick={handleSubmit} className='btn_l on'>Next</button>
+                  <button onClick={handleSubmit} className='btn_l on'>다음</button>
                   &nbsp;
-                  <button onClick={handleCancel} className='btn_l'>Cancel Create Account</button>
+                  <button onClick={handleCancel} className='btn_l'>계좌개설 취소</button>
                 </div>
               </>
               :
               <div className='btnArea'>
-                <button onClick={handleCancel} className='btn_l'>To Main</button>
+                <button onClick={handleCancel} className='btn_l'>완료</button>
               </div>
             }
           </form>
