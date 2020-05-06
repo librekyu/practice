@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import Router from 'next/router';
 import { USER_CONST } from '../../../common/globalConst';
 import window from 'global';
+import GLOBAL_CONST from '../../../common/globalConstant';
 
 /** 하단 Footer */
 const Footer = () => {
@@ -20,7 +21,7 @@ const Footer = () => {
               className="footerLogo">
               <img src={`${USER_CONST.BASE_IMAGE_PATH}/common/logo_footer.png`}
                    style={{width:'200px'}}
-                   alt="푸른새벽 Agent Banking" />
+                   alt={"푸른새벽 " + GLOBAL_CONST.APP_NAME_NORMAL} />
             </a>
           </li>
           <p className='footerCopyright'>

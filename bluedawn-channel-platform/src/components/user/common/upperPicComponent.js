@@ -1,6 +1,7 @@
 import React from 'react';
 import { mainMenus } from '../../../common/user/menu';
 import { USER_CONST } from '../../../common/globalConst';
+import GLOBAL_CONST from '../../../common/globalConstant';
 
 const UpperPicComponent = ({ pageInfo }) => {
   let className = '';
@@ -46,7 +47,7 @@ const UpperPicComponent = ({ pageInfo }) => {
         : <div id='subVisual' className={className}>
           <div className='inner'>
             <p>
-              <b>Agent Banking</b>
+              <b>{GLOBAL_CONST.APP_NAME_NORMAL}</b>
             </p>
           </div>
         </div>}

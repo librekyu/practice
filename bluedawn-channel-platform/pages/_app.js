@@ -12,6 +12,7 @@ import UserJsmartLayout from '../src/components/user/common/JsmartLayout';
 import rootReducer from '../src/reducers';
 import rootSaga from '../src/sagas';
 import GlobalStyle from '../static/css/globalStyle';
+import GLOBAL_CONST from '../src/common/globalConstant';
 
 const _ = require('underscore');
 
@@ -31,7 +32,7 @@ const Jsmart = ({ Component, store, pageProps, routerInfo }) => {
   return (
     <Provider store={store}>
       <Helmet
-        title="Agent Banking"
+        title={GLOBAL_CONST.APP_NAME_NORMAL}
         htmlAttributes={{ lang: 'ko' }}
         meta={[{
           charSet: 'UTF-8',
@@ -44,13 +45,13 @@ const Jsmart = ({ Component, store, pageProps, routerInfo }) => {
           content: 'IE=edge',
         }, {
           name: 'description',
-          content: 'Agent Banking',
+          content: GLOBAL_CONST.APP_NAME_NORMAL,
         }, {
           name: 'og:title',
           content: 'Jsmart'
         }, {
           name: 'og:description',
-          content: 'Agent Banking'
+          content: GLOBAL_CONST.APP_NAME_NORMAL
         }, {
           property: 'og:type',
           content: 'website',

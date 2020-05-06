@@ -6,6 +6,7 @@ import { mainMenus } from '../../../common/user/menu';
 import { USER_LOG_IN_ACTION } from '../../../reducers/user/userInfo/login';
 import Util from '../../../common/util';
 import { USER_CONST } from '../../../common/globalConst';
+import GLOBAL_CONST from '../../../common/globalConstant';
 
 // Hook
 function useWindowSize() {
@@ -207,7 +208,7 @@ const Header = memo(({ pageInfo, isLoggedIn, isOverlay, setIsOverlay }) => {
           <li>
             <h1>
               <a onClick={handleGoHome}>
-                Agent Banking
+                {GLOBAL_CONST.APP_NAME_NORMAL}
               </a>
             </h1>
           </li>

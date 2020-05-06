@@ -352,7 +352,7 @@ span.tableControl a.btn_next{margin-left:20px;}
 html{}
 body{}
 #wrap{min-width:1200px;}
-//#wrap.main{background:url(${USER_CONST.BASE_IMAGE_PATH}/common/bg_mainVisual.png) no-repeat center top;background-size:contain;}
+#wrap.main{background:url(${USER_CONST.BASE_IMAGE_PATH}/common/bg_mainVisual.png) no-repeat center top;background-size:contain;}
 #wrap.main:before{display:block;content:'';position:absolute;top:0;left:0;right:0;height:810px;background:#ebebeb;z-index:-1;}
 #wrap.main #header *{color:#000;}
 #wrap.main #header .topNav li:after{border-color:#fff;}
@@ -621,7 +621,7 @@ input + .btn_m, .btn_m + .btn_m{margin-left:5px;}
 .mainSection.section1 .text1{padding-top:128px;line-height:110%;color:#fff;font-weight:normal;font-size:60px;}
 .mainSection.section1 .text2{padding:0px 0;line-height:110%;color:#000;font-weight:normal;font-size:22px;}
 .mainSection.section1 .btn{display:inline-block;width:150px;height:50px;line-height:50px;text-align:center;color:#fff;border-radius:5px;border:1px solid #fff;background-color:rgba(0,0,0,0.4);margin:10px;}
-.mainSection.section2 h2{padding:65px 0;}
+.mainSection.section2 h2{padding:65px 0;}z
 .mainSection.section2{height:470px;background:url(${USER_CONST.BASE_IMAGE_PATH}/content/bg_main_section2.jpg) no-repeat center top;}
 .mainSection.section2 ul.service{justify-content:space-between;display:flex;}
 .mainSection.section2 ul.service:after{content:'';clear:both;}

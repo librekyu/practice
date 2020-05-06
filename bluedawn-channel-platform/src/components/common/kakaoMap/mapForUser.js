@@ -4,7 +4,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import AsideLowerLegendTable from '../../user/common/map/asideLowerLegendTable';
-import { COMMON_CHART_OPTION, USER_CONST } from '../../../common/globalConst';
 
 /** 맵 설정 */
 const MAP_CONFIG = {

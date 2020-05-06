@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Router, { useRouter } from 'next/router';
 import { USER_LOG_IN_ACTION } from '../../../../src/reducers/user/userInfo/login';
 import { USER_CONST } from '../../../../src/common/globalConst';
+import GLOBAL_CONST from '../../../../src/common/globalConstant';
 
 /**
  * 로그인 페이지
@@ -70,7 +71,7 @@ const Login = () => {
             <span>로그인</span>
           </div>
           <h3>LOGIN</h3>
-          <p>Agent Banking 로그인</p>
+          <p>{GLOBAL_CONST.APP_NAME_NORMAL} 로그인</p>
         </div>
         <div className="loginForm">
           <form onSubmit={handleLogin}>

@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import fs from 'fs';
-import AddressSearchInput from '../../../../src/components/common/userAddressSearchInput';
 import Router from 'next/router';
 import { USER_CONST } from '../../../../src/common/globalConst';
 import Loading from '../../../../src/components/user/common/Loading';
@@ -75,19 +73,18 @@ const CreateAccount = () => {
   };
 
   const fileRef = useRef();
+  const imageRef = useRef();
 
   const [phase, setPhase] = useState(0);
   const [joinInfo, setJoinInfo] = useState(initialJoinAccountInfo);              // 회원입력정보
   const [showLoading, setShowLoading] = useState(false);
   const [loadingStatement, setLoadingStatement] = useState('');
-  const [fileList, setFileList] = useState('');
 
   useEffect(() => {
     return () => {
       setPhase(0);
       setLoadingStatement('');
       setJoinInfo(initialJoinAccountInfo);
-      setFileList('');
     };
   }, []);
 
@@ -96,7 +93,7 @@ const CreateAccount = () => {
 
     setJoinInfo((prev) => ({
       ...prev,
-      [name]: name === 'mobileNumber' ? Util.numberWithoutSpace(value) : value
+      [name]: name === joinAccountInfoMap.mobileNumber.name ? Util.numberWithoutSpace(value) : value
     }));
   }, [joinInfo]);
 
@@ -122,7 +119,6 @@ const CreateAccount = () => {
     setPhase(0);
     setLoadingStatement('');
     setJoinInfo(initialJoinAccountInfo);
-    setFileList([]);
   }, []);
 
   const onClickDemo = useCallback((e) => {
@@ -131,6 +127,7 @@ const CreateAccount = () => {
       setJoinInfo((prev) => ({
         ...prev,
         identification: DUMMY.IDENTIFICATION_IMG,
+        attachment: DUMMY.FILE_NAME,
         id: DUMMY.ID,
         userName: DUMMY.NAME,
         mobileNumber: DUMMY.PHONE_NUMBER,
@@ -139,10 +136,7 @@ const CreateAccount = () => {
         address: DUMMY.ADDRESS,
         detailAddress: DUMMY.DETAIL_ADDRESS,
         nationality: DUMMY.NATIONALITY,
-
       }));
-
-      setFileList(DUMMY.FILE_NAME);
     }
 
     phase === 1 && setJoinInfo((prev) => ({
@@ -151,6 +145,25 @@ const CreateAccount = () => {
       customerPIN: DUMMY.CLIENT_PIN,
     }));
   }, [phase]);
+
+  const onClickAddIdentification = useCallback((e) => {
+    e.preventDefault();
+    fileRef.current.click();
+  }, []);
+
+  const onChangeImageFile = useCallback((e) => {
+    const reader = new FileReader();
+    const image = e.target.files[0];
+
+    if(!image) return;
+
+  reader.onloadend = (e) => {
+    handleInputJoinInfoChange(joinAccountInfoMap.identification.name, e.target.result);
+  };
+
+  reader.readAsDataURL(image);
+
+  }, []);
 
   const onClickAddAttachment = useCallback((e) => {
     e.preventDefault();
@@ -164,7 +177,7 @@ const CreateAccount = () => {
     if (!file) return;
 
     reader.onloadend = (e) => {
-      setFileList(file.name);
+      handleInputJoinInfoChange(joinAccountInfoMap.attachment.name, file.name);
     };
 
     reader.readAsDataURL(file);
@@ -173,14 +186,13 @@ const CreateAccount = () => {
 
   const renderFileList = useCallback(() => {
     return (
-      <label>{fileList}</label>);
-  }, [fileList]);
+      <label>{joinInfo.attachment}</label>);
+  }, [joinInfo.attachment]);
 
   const requireStyle = {
     fontWeight: 'bold',
     color: '#ed1c24'
   };
-  // fs.readdir('./', (err, fileList) =>{console.log(fileList.toString())});
 
   return (
     <>
@@ -225,7 +237,7 @@ const CreateAccount = () => {
                       {joinInfo.identification ? <img src={joinInfo.identification} alt={''}/> :
                         <div className="imgInsertBox w50p h300"><span className="bg">Identification</span></div>}&nbsp;
                       <br/>
-                      <button className={'btn_l'}>Add Identification</button>
+                      <button className={'btn_l'} onClick={onClickAddAttachment}>Add Identification</button>
                     </td>
                   </tr>
                   <tr>
